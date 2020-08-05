@@ -8,15 +8,19 @@ import java.util.zip.ZipOutputStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        String path = zipArchiver("src/main/resources/Новый текстовый документ.txt");
-//        System.out.println(path);
-        String unZipPath = unZipFile("src/main/resources/compressed.zip");
-        System.out.println(unZipPath);
+        if (args[0].endsWith(".zip")){
+            String unZipPath = unZipFile(args[0]);
+            System.out.println(unZipPath);
+        } else {
+            String path = zipArchiver(args[0]);
+            System.out.println(path);
+        }
+
     }
 
     public static String zipArchiver(String fileIn) throws IOException {
         File fileToZip = new File(fileIn);
-        String pathToZipFile = "src/main/resources/compressed.zip";
+        String pathToZipFile = "C:/Users/phil/Desktop/compressed.zip";
         if (fileToZip.isFile()) {
             FileOutputStream fos = new FileOutputStream(pathToZipFile);
             ZipOutputStream zipOut = new ZipOutputStream(fos);
@@ -72,7 +76,7 @@ public class Main {
     }
 
     public static String unZipFile(String fileZip) throws IOException {
-        String path = "src/main/resources/unzipTest";
+        String path = "C:/Users/phil/Desktop/";
         File destDir = new File(path);
         if (!destDir.exists()) {
             destDir.mkdir();
