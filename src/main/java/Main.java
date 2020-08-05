@@ -14,7 +14,7 @@ public class Main {
         System.out.println(unZipPath);
     }
 
-    private static String zipArchiver(String fileIn) throws IOException {
+    public static String zipArchiver(String fileIn) throws IOException {
         File fileToZip = new File(fileIn);
         String pathToZipFile = "src/main/resources/compressed.zip";
         if (fileToZip.isFile()) {
