@@ -1,22 +1,52 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        if (args[0].endsWith(".zip")){
+        if (args.length > 0 && args[0].endsWith(".zip")) {
             String unZipPath = unZipFile(args[0]);
             System.out.println(unZipPath);
-        } else {
+        }
+        if (args.length > 0 && !args[0].endsWith(".zip")) {
             String path = zipArchiver(args[0]);
             System.out.println(path);
-        }
+        } else {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String text = reader.readLine();
+            boolean isZipped = new ZipInputStream(System.in).getNextEntry() != null;
+            if (!isZipped) {
+                File tempFile = File.createTempFile("hello", ".txt");
 
+                try (FileWriter writer = new FileWriter(tempFile)) {
+                    writer.write(text);
+                    writer.flush();
+                } catch (IOException ex) {
+
+                    System.out.println(ex.getMessage());
+                }
+                String path = zipArchiver(tempFile.toString());
+                System.out.println(path);
+            }
+            if (isZipped) {
+                File tempFile = File.createTempFile("hello", ".zip");
+
+                try (FileWriter writer = new FileWriter(tempFile)) {
+                    writer.write(text);
+                    writer.flush();
+                } catch (IOException ex) {
+
+                    System.out.println(ex.getMessage());
+                }
+                String path = unZipFile(tempFile.toString());
+                System.out.println(path);
+            }
+
+        }
     }
+
 
     public static String zipArchiver(String fileIn) throws IOException {
         File fileToZip = new File(fileIn);
@@ -76,11 +106,7 @@ public class Main {
     }
 
     public static String unZipFile(String fileZip) throws IOException {
-        String path = "C:/Users/phil/Desktop/";
-        File destDir = new File(path);
-        if (!destDir.exists()) {
-            destDir.mkdir();
-        }
+        File destDir = new File(System.getProperty("user.dir"));
         byte[] buffer = new byte[1024];
         ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
         ZipEntry zipEntry = zis.getNextEntry();
@@ -96,7 +122,7 @@ public class Main {
         }
         zis.closeEntry();
         zis.close();
-        return path;
+        return destDir.toString();
     }
 
     public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
@@ -111,4 +137,5 @@ public class Main {
 
         return destFile;
     }
+
 }
