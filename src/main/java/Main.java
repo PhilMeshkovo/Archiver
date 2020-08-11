@@ -1,15 +1,27 @@
 import java.io.*;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        if (args.length > 0 && args[0].endsWith(".zip")) {
+        if (args.length == 1 && args[0].endsWith(".zip")) {
             String unZipPath = ZipArchiver.unZipFile(args[0]);
             System.out.println(unZipPath);
         }
-        if (args.length > 0 && !args[0].endsWith(".zip")) {
-            String path = ZipArchiver.zipArchiver(args[0]);
+        if (args.length == 1 && !args[0].endsWith(".zip")) {
+            File file = new File(args[0]);
+            if (file.isDirectory()) {
+                String path = ZipArchiver.ZipDirectory(args[0]);
+                System.out.println(path);
+            } else {
+                String path = ZipArchiver.zipArchiver(args[0]);
+                System.out.println(path);
+            }
+        }
+        if (args.length > 1 && !args[0].endsWith(".zip")) {
+            List<String> files = Arrays.asList(args);
+            String path = ZipArchiver.ZipMultipleFiles(files);
             System.out.println(path);
         } else {
             InputStream inputStream = System.in;
