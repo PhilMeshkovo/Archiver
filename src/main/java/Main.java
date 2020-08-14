@@ -6,7 +6,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
         if (args.length == 1 && args[0].endsWith(".zip")) {
-            String unZipPath = ZipArchiver.unZipFile(args[0]);
+            String unZipPath = ZipArchiver.extract(args[0]);
             System.out.println(unZipPath);
         }
         if (args.length == 1 && !args[0].endsWith(".zip")) {
@@ -39,7 +39,7 @@ public class Main {
 
                     System.out.println(ex.getMessage());
                 }
-                String path = ZipArchiver.unZipFile(tempFile.toString());
+                String path = ZipArchiver.extract(tempFile.toString());
                 System.out.println(path);
             } else {
                 File tempFile = File.createTempFile("hello", ".txt");
